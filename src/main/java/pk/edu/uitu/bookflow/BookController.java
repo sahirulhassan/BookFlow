@@ -70,9 +70,9 @@ public class BookController {
 
     @FXML
     void handleAddUpdate() {
-        String isbn = isbnField.getText();
-        String title = titleField.getText();
-        String author = authorField.getText();
+        String isbn = isbnField.getText().trim();
+        String title = titleField.getText().trim();
+        String author = authorField.getText().trim();
         String genre = genreComboBox.getValue();
         int available = availableSpinner.getValue();
         double price = priceSpinner.getValue();
@@ -99,8 +99,7 @@ public class BookController {
 
     private void addBook(String isbn, String title, String author, String genre, int available, double price) {
         String query = "INSERT INTO books (ISBN, title, author, genre, available, price) VALUES (?, ?, ?, ?, ?, ?)";
-        try (Connection connection = Database.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try (Connection connection = Database.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, isbn);
             preparedStatement.setString(2, title);
             preparedStatement.setString(3, author);
@@ -123,8 +122,7 @@ public class BookController {
 
     private void updateBook(String isbn, String title, String author, String genre, int available, double price) {
         String query = "UPDATE books SET title = ?, author = ?, genre = ?, available = ?, price = ? WHERE ISBN = ?";
-        try (Connection connection = Database.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try (Connection connection = Database.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, title);
             preparedStatement.setString(2, author);
             preparedStatement.setString(3, genre);
@@ -160,8 +158,7 @@ public class BookController {
         }
 
         String query = "DELETE FROM books WHERE ISBN = ?";
-        try (Connection connection = Database.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try (Connection connection = Database.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, isbn);
             int rowsAffected = preparedStatement.executeUpdate();
             if (rowsAffected > 0) {
@@ -178,9 +175,7 @@ public class BookController {
     }
 
     private boolean bookExists(String isbn) {
-        try (Connection connection = Database.getConnection();
-             Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery("SELECT COUNT(*) FROM books WHERE ISBN = '" + isbn + "'")) {
+        try (Connection connection = Database.getConnection(); Statement statement = connection.createStatement(); ResultSet resultSet = statement.executeQuery("SELECT COUNT(*) FROM books WHERE ISBN = '" + isbn + "'")) {
             if (resultSet.next()) {
                 return resultSet.getInt(1) > 0; // If count is greater than 0, book exists
             }
@@ -211,32 +206,14 @@ public class BookController {
                 priceSpinner.getValueFactory().setValue(newSelection.getPrice());
             }
         });
-        genreComboBox.getItems().addAll(
-                "Fantasy",
-                "Science Fiction",
-                "Mystery",
-                "Thriller",
-                "Romance",
-                "Historical Fiction",
-                "Horror",
-                "Biography",
-                "Self Help",
-                "Young Adult",
-                "Graphic Novel",
-                "Classic",
-                "Adventure",
-                "Dystopian",
-                "Literary Fiction"
-        );
+        genreComboBox.getItems().addAll("Fantasy", "Science Fiction", "Mystery", "Thriller", "Romance", "Historical Fiction", "Horror", "Biography", "Self Help", "Young Adult", "Graphic Novel", "Classic", "Adventure", "Dystopian", "Literary Fiction");
         genreComboBox.setValue("Fiction");
         availableSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 1000, 0));
         priceSpinner.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(0.0, 10000.0, 0.0, 1.0));
     }
 
     private FilteredList<Book> getFilteredBooks(ObservableList<Book> books) {
-        ObjectBinding<Predicate<Book>> binding = Bindings.createObjectBinding(
-                this::createBookPredicate,
-                searchField.textProperty(), // whenever this
+        ObjectBinding<Predicate<Book>> binding = Bindings.createObjectBinding(this::createPredicate, searchField.textProperty(), // whenever this
                 searchChoiceBox.valueProperty() // or this changes, the predicate method will be called
         );
 
@@ -250,19 +227,10 @@ public class BookController {
     private ObservableList<Book> getBooks() { // Fetch books from the database
         ObservableList<Book> books = FXCollections.observableArrayList();
         String query = "SELECT * FROM books";
-        try (Connection connection = Database.getConnection();
-             Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(query)) {
+        try (Connection connection = Database.getConnection(); Statement statement = connection.createStatement(); ResultSet resultSet = statement.executeQuery(query)) {
 
             while (resultSet.next()) {
-                books.add(new Book(
-                        resultSet.getString("ISBN"),
-                        resultSet.getString("title"),
-                        resultSet.getString("author"),
-                        resultSet.getString("genre"),
-                        resultSet.getInt("available"),
-                        resultSet.getInt("price")
-                ));
+                books.add(new Book(resultSet.getString("ISBN"), resultSet.getString("title"), resultSet.getString("author"), resultSet.getString("genre"), resultSet.getInt("available"), resultSet.getInt("price")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -270,7 +238,7 @@ public class BookController {
         return books;
     }
 
-    private Predicate<Book> createBookPredicate() {
+    private Predicate<Book> createPredicate() {
         String searchText = searchField.getText();
         String choice = searchChoiceBox.getValue();
 

@@ -23,71 +23,71 @@ public class Book {
         return title.get();
     }
 
-    public StringProperty titleProperty() {
-        return title;
-    }
-
     public void setTitle(String title) {
         this.title.set(title);
+    }
+
+    public StringProperty titleProperty() {
+        return title;
     }
 
     public String getISBN() {
         return ISBN.get();
     }
 
-    public StringProperty ISBNProperty() {
-        return ISBN;
-    }
-
     public void setISBN(String ISBN) {
         this.ISBN.set(ISBN);
+    }
+
+    public StringProperty ISBNProperty() {
+        return ISBN;
     }
 
     public String getAuthor() {
         return author.get();
     }
 
-    public StringProperty authorProperty() {
-        return author;
-    }
-
     public void setAuthor(String author) {
         this.author.set(author);
+    }
+
+    public StringProperty authorProperty() {
+        return author;
     }
 
     public String getGenre() {
         return genre.get();
     }
 
-    public StringProperty genreProperty() {
-        return genre;
-    }
-
     public void setGenre(String genre) {
         this.genre.set(genre);
+    }
+
+    public StringProperty genreProperty() {
+        return genre;
     }
 
     public int getAvailable() {
         return available.get();
     }
 
-    public IntegerProperty availableProperty() {
-        return available;
-    }
-
     public void setAvailable(int available) {
         this.available.set(available);
+    }
+
+    public IntegerProperty availableProperty() {
+        return available;
     }
 
     public Double getPrice() {
         return price.get();
     }
 
-    public DoubleProperty priceProperty() {
-        return price;
-    }
-
     public void setPrice(int price) {
         this.price.set(price);
+    }
+
+    public DoubleProperty priceProperty() {
+        return price;
     }
 }
