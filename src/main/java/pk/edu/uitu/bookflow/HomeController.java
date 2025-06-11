@@ -56,7 +56,7 @@ public class HomeController implements Initializable {
 
     @FXML
     private void handleMembersTab() {
-        switchViews("members.fxml");
+        switchViews("users.fxml");
     }
 
     @FXML

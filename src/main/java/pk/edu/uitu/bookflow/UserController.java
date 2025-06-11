@@ -85,7 +85,7 @@ public class UserController {
     }
 
     private void addUser(int id, String name, String email, String password, String role, LocalDate joined) {
-        String query = "INSERT INTO users (ID, Name, Email, Password, Role, Created At) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO users (ID, Name, Email, Password, Role, Created_At) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection connection = Database.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, id);
             preparedStatement.setString(2, name);
@@ -197,7 +197,9 @@ public class UserController {
         try (Connection connection = Database.getConnection(); Statement statement = connection.createStatement(); ResultSet resultSet = statement.executeQuery(query)) {
 
             while (resultSet.next()) {
-                users.add(new User(resultSet.getInt("ID"), resultSet.getString("Name"), resultSet.getString("Email"), resultSet.getString("Password"), resultSet.getString("Role"), resultSet.getDate("Joined").toLocalDate()));
+                users.add(new User(resultSet.getInt("ID"), resultSet.getString("Name"), resultSet.getString("Email"),
+                        resultSet.getString("Password"), resultSet.getString("Role"),
+                        resultSet.getDate("Created_At").toLocalDate()));
             }
         } catch (SQLException e) {
             e.printStackTrace();
