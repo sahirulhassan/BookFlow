@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.Group?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -25,44 +27,179 @@
                               <TextField fx:id="isbnField" promptText="ISBN" />
                               <Button fx:id="isbnSearchBtn" mnemonicParsing="false" onAction="#handleIsbnSearch" text="Search" />
                            </children>
+                           <VBox.margin>
+                              <Insets bottom="30.0" top="20.0" />
+                           </VBox.margin>
                         </HBox>
-                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                        <GridPane gridLinesVisible="true">
+                          <columnConstraints>
+                            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="259.39996337890625" minWidth="10.0" prefWidth="145.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="400.20001220703125" minWidth="10.0" prefWidth="385.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
                            <children>
-                              <Label fx:id="issueLabel1" alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" wrapText="true" VBox.vgrow="ALWAYS">
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" text="Book Title:" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+                                 <GridPane.margin>
+                                    <Insets left="10.0" />
+                                 </GridPane.margin>
                                  <font>
-                                    <Font name="Calibri" size="14.0" />
+                                    <Font name="Calibri" size="16.0" />
+                                 </font>
+                              </Label>
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" text="Book Author:" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
+                                 <GridPane.margin>
+                                    <Insets left="10.0" />
+                                 </GridPane.margin>
+                                 <font>
+                                    <Font name="Calibri" size="16.0" />
+                                 </font>
+                              </Label>
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" text="Available Copies:" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS">
+                                 <GridPane.margin>
+                                    <Insets left="10.0" />
+                                 </GridPane.margin>
+                                 <font>
+                                    <Font name="Calibri" size="16.0" />
+                                 </font>
+                              </Label>
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" text="Price:" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.vgrow="ALWAYS">
+                                 <GridPane.margin>
+                                    <Insets left="10.0" />
+                                 </GridPane.margin>
+                                 <font>
+                                    <Font name="Calibri" size="16.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="titleLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+                                 <GridPane.margin>
+                                    <Insets left="10.0" />
+                                 </GridPane.margin>
+                                 <font>
+                                    <Font name="Calibri" size="16.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="authorLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
+                                 <GridPane.margin>
+                                    <Insets left="10.0" />
+                                 </GridPane.margin>
+                                 <font>
+                                    <Font name="Calibri" size="16.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="availableLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS">
+                                 <GridPane.margin>
+                                    <Insets left="10.0" />
+                                 </GridPane.margin>
+                                 <font>
+                                    <Font name="Calibri" size="16.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="priceLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.vgrow="ALWAYS">
+                                 <GridPane.margin>
+                                    <Insets left="10.0" />
+                                 </GridPane.margin>
+                                 <font>
+                                    <Font name="Calibri" size="16.0" />
                                  </font>
                               </Label>
                            </children>
                            <VBox.margin>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                              <Insets left="200.0" right="200.0" />
                            </VBox.margin>
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                           </padding>
-                        </VBox>
+                        </GridPane>
                         <HBox alignment="CENTER" fillHeight="false">
                            <children>
                               <TextField fx:id="userIDField" disable="true" promptText="User ID" />
                               <Button fx:id="issueBtn" disable="true" mnemonicParsing="false" onAction="#handleIssueBtn" text="Issue" />
                            </children>
+                           <VBox.margin>
+                              <Insets bottom="20.0" top="50.0" />
+                           </VBox.margin>
                         </HBox>
-                        <Group />
-                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                        <HBox alignment="CENTER" fillHeight="false" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity">
                            <children>
-                              <Label fx:id="issueLabel2" alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" wrapText="true" VBox.vgrow="ALWAYS">
+                              <Label alignment="CENTER" text="Book Issued to:">
                                  <font>
-                                    <Font name="Calibri" size="14.0" />
+                                    <Font name="Gill Sans MT" size="18.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets bottom="5.0" />
+                                 </HBox.margin>
+                              </Label>
+                           </children>
+                           <VBox.margin>
+                              <Insets top="20.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <GridPane gridLinesVisible="true">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="257.800048828125" minWidth="10.0" prefWidth="145.40001220703124" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="429.79998779296875" minWidth="10.0" prefWidth="383.7999877929688" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" text="User ID:" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+                                 <GridPane.margin>
+                                    <Insets left="10.0" />
+                                 </GridPane.margin>
+                                 <font>
+                                    <Font name="Calibri" size="16.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="issue_userIdLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+                                 <GridPane.margin>
+                                    <Insets left="10.0" />
+                                 </GridPane.margin>
+                                 <font>
+                                    <Font name="Calibri" size="16.0" />
+                                 </font>
+                              </Label>
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" text="User Name;" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
+                                 <GridPane.margin>
+                                    <Insets left="10.0" />
+                                 </GridPane.margin>
+                                 <font>
+                                    <Font name="Calibri" size="16.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="userNameLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
+                                 <GridPane.margin>
+                                    <Insets left="10.0" />
+                                 </GridPane.margin>
+                                 <font>
+                                    <Font name="Calibri" size="16.0" />
+                                 </font>
+                              </Label>
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" text="Return Date:" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS">
+                                 <GridPane.margin>
+                                    <Insets left="10.0" />
+                                 </GridPane.margin>
+                                 <font>
+                                    <Font name="Calibri" size="16.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="issue_returnDateLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS">
+                                 <GridPane.margin>
+                                    <Insets left="10.0" />
+                                 </GridPane.margin>
+                                 <font>
+                                    <Font name="Calibri" size="16.0" />
                                  </font>
                               </Label>
                            </children>
                            <VBox.margin>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                              <Insets left="200.0" right="200.0" />
                            </VBox.margin>
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                           </padding>
-                        </VBox>
+                        </GridPane>
                      </children>
                      <padding>
                         <Insets top="10.0" />
@@ -72,7 +209,7 @@
             </Tab>
           <Tab text="Return">
                <content>
-                  <VBox prefHeight="200.0" prefWidth="100.0">
+                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                      <padding>
                         <Insets top="10.0" />
                      </padding>
@@ -83,44 +220,146 @@
                               <Button fx:id="copyIdSearchBtn" mnemonicParsing="false" onAction="#handleCopyIdSearch" text="Search" />
                            </children>
                         </HBox>
-                        <VBox prefHeight="200.0" prefWidth="100.0">
+                        <GridPane gridLinesVisible="true">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
                            <children>
-                              <Label fx:id="returnLabel1" alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" wrapText="true" VBox.vgrow="ALWAYS">
-                                 <VBox.margin>
-                                    <Insets />
-                                 </VBox.margin>
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Copy ID:" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
                                  <font>
-                                    <Font name="Calibri" size="14.0" />
+                                    <Font name="Calibri" size="16.0" />
                                  </font>
+                                 <GridPane.margin>
+                                    <Insets left="10.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="ISBN:" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
+                                 <font>
+                                    <Font name="Calibri" size="16.0" />
+                                 </font>
+                                 <GridPane.margin>
+                                    <Insets left="10.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="User ID:" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS">
+                                 <font>
+                                    <Font name="Calibri" size="16.0" />
+                                 </font>
+                                 <GridPane.margin>
+                                    <Insets left="10.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Issue Date:" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.vgrow="ALWAYS">
+                                 <font>
+                                    <Font name="Calibri" size="16.0" />
+                                 </font>
+                                 <GridPane.margin>
+                                    <Insets left="10.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Return Date:" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" GridPane.vgrow="ALWAYS">
+                                 <font>
+                                    <Font name="Calibri" size="16.0" />
+                                 </font>
+                                 <GridPane.margin>
+                                    <Insets left="10.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Status" GridPane.hgrow="ALWAYS" GridPane.rowIndex="5" GridPane.vgrow="ALWAYS">
+                                 <font>
+                                    <Font name="Calibri" size="16.0" />
+                                 </font>
+                                 <GridPane.margin>
+                                    <Insets left="10.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Overdue Status:" GridPane.hgrow="ALWAYS" GridPane.rowIndex="6" GridPane.vgrow="ALWAYS">
+                                 <font>
+                                    <Font name="Calibri" size="16.0" />
+                                 </font>
+                                 <GridPane.margin>
+                                    <Insets left="10.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label fx:id="copyIDLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+                                 <font>
+                                    <Font name="Calibri" size="16.0" />
+                                 </font>
+                                 <GridPane.margin>
+                                    <Insets left="10.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label fx:id="isbnLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
+                                 <font>
+                                    <Font name="Calibri" size="16.0" />
+                                 </font>
+                                 <GridPane.margin>
+                                    <Insets left="10.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label fx:id="return_userIdLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS">
+                                 <font>
+                                    <Font name="Calibri" size="16.0" />
+                                 </font>
+                                 <GridPane.margin>
+                                    <Insets left="10.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label fx:id="issueDateLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.vgrow="ALWAYS">
+                                 <font>
+                                    <Font name="Calibri" size="16.0" />
+                                 </font>
+                                 <GridPane.margin>
+                                    <Insets left="10.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label fx:id="return_returnDateLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" GridPane.vgrow="ALWAYS">
+                                 <font>
+                                    <Font name="Calibri" size="16.0" />
+                                 </font>
+                                 <GridPane.margin>
+                                    <Insets left="10.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label fx:id="statusLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="5" GridPane.vgrow="ALWAYS">
+                                 <font>
+                                    <Font name="Calibri" size="16.0" />
+                                 </font>
+                                 <GridPane.margin>
+                                    <Insets left="10.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label fx:id="overdueStatusLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="6" GridPane.vgrow="ALWAYS">
+                                 <font>
+                                    <Font name="Calibri" size="16.0" />
+                                 </font>
+                                 <GridPane.margin>
+                                    <Insets left="10.0" />
+                                 </GridPane.margin>
                               </Label>
                            </children>
                            <VBox.margin>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                              <Insets left="200.0" right="200.0" />
                            </VBox.margin>
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                           </padding>
-                        </VBox>
+                        </GridPane>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                            <children>
                               <Button fx:id="returnBtn" disable="true" mnemonicParsing="false" onAction="#handleReturnBtn" text="Return" />
                            </children>
+                           <VBox.margin>
+                              <Insets top="20.0" />
+                           </VBox.margin>
                         </HBox>
-                        <VBox prefHeight="200.0" prefWidth="100.0">
-                           <children>
-                              <Label fx:id="returnLabel2" alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" wrapText="true" VBox.vgrow="ALWAYS">
-                                 <VBox.margin>
-                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                 </VBox.margin>
-                                 <padding>
-                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                 </padding>
-                                 <font>
-                                    <Font name="Calibri" size="14.0" />
-                                 </font>
-                              </Label>
-                           </children>
-                        </VBox>
                      </children>
                   </VBox>
                </content>

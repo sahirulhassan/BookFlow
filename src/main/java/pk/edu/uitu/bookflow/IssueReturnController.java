@@ -7,43 +7,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 
 public class IssueReturnController {
-
-    @FXML
-    private TextField CopyIDField;
-
-    @FXML
-    private Button copyIdSearchBtn;
-
-    @FXML
-    private TextField isbnField;
-
-    @FXML
-    private Button isbnSearchBtn;
-
-    @FXML
-    private Button issueBtn;
-
-    @FXML
-    private Label issueLabel1;
-
-    @FXML
-    private Label issueLabel2;
-
-    @FXML
-    private Button returnBtn;
-
-    @FXML
-    private Label returnLabel1;
-
-    @FXML
-    private Label returnLabel2;
-
-    @FXML
-    private TextField userIDField;
 
     // SQL queries as constants
     private static final String SELECT_BOOK_BY_ISBN = "SELECT title, author, available, price FROM books WHERE isbn = ?";
@@ -57,6 +27,48 @@ public class IssueReturnController {
     private static final String UPDATE_ISSUED_STATUS_RETURNED = "UPDATE loaned_books SET status = 'RETURNED' WHERE id" +
             " = ?";
     private static final String UPDATE_BOOK_AVAILABILITY_INCREMENT = "UPDATE books SET available = available + 1 WHERE isbn = ?";
+    @FXML
+    private TextField CopyIDField;
+    @FXML
+    private Label authorLabel;
+    @FXML
+    private Label availableLabel;
+    @FXML
+    private Label copyIDLabel;
+    @FXML
+    private Button copyIdSearchBtn;
+    @FXML
+    private TextField isbnField;
+    @FXML
+    private Label isbnLabel;
+    @FXML
+    private Button isbnSearchBtn;
+    @FXML
+    private Button issueBtn;
+    @FXML
+    private Label issueDateLabel;
+    @FXML
+    private Label issue_returnDateLabel;
+    @FXML
+    private Label issue_userIdLabel;
+    @FXML
+    private Label overdueStatusLabel;
+    @FXML
+    private Label priceLabel;
+    @FXML
+    private Button returnBtn;
+    @FXML
+    private Label return_returnDateLabel;
+    @FXML
+    private Label return_userIdLabel;
+    @FXML
+    private Label statusLabel;
+    @FXML
+    private Label titleLabel;
+    @FXML
+    private TextField userIDField;
+    @FXML
+    private Label userNameLabel;
 
     @FXML
     public void initialize() {
@@ -97,9 +109,10 @@ public class IssueReturnController {
                 int availableCopies = rs.getInt("available");
                 int price = rs.getInt("price");
 
-                issueLabel1.setText(String.format(
-                        "Title: %s%nAuthor: %s%nAvailable Copies: %d%nPrice: %d PKR",
-                        title, author, availableCopies, price));
+                titleLabel.setText(title);
+                authorLabel.setText(author);
+                availableLabel.setText(String.valueOf(availableCopies));
+                priceLabel.setText(String.valueOf(price));
 
                 if (availableCopies > 0) {
                     userIDField.setDisable(false);
@@ -164,10 +177,9 @@ public class IssueReturnController {
             conn.commit();
 
             showAlert(Alert.AlertType.INFORMATION, "Book issued successfully!");
-            issueLabel2.setText(String.format(
-                    "Book issued to User ID: %s%nUser Name: %s%nReturn Date: %s",
-                    userId, username, returnDate));
-            disableIssueControls();
+            issue_userIdLabel.setText(userId);
+            userNameLabel.setText(username);
+            issue_returnDateLabel.setText(returnDate_inText);
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -201,11 +213,15 @@ public class IssueReturnController {
                     return;
                 }
                 boolean isOverdue = LocalDate.now().isAfter(returnDate);
-                String overdueNote = isOverdue ? "This book is OVERDUE!" : "";
+                String overdueNote = isOverdue ? "This book is OVERDUE!" : "This book is not overdue.";
 
-                returnLabel1.setText(String.format(
-                        "Copy ID: %s%nISBN: %s%nUser ID: %s%nIssue Date: %s%nReturn Date: %s%nStatus: %s%n%s",
-                        copyID, isbn, userId, issueDate, returnDate, status, overdueNote));
+                copyIDLabel.setText(copyID);
+                isbnLabel.setText(isbn);
+                return_userIdLabel.setText(userId);
+                issueDateLabel.setText(issueDate.toString());
+                return_returnDateLabel.setText(returnDate.toString());
+                statusLabel.setText(status);
+                overdueStatusLabel.setText(overdueNote);
                 returnBtn.setDisable(false);
             }
         } catch (SQLException e) {
@@ -249,7 +265,6 @@ public class IssueReturnController {
             conn.commit();
 
             showAlert(Alert.AlertType.INFORMATION, "Book returned successfully!");
-            returnLabel2.setText("Book with Copy ID: " + copyID + " has been returned successfully.");
             returnBtn.setDisable(true);
 
         } catch (SQLException e) {
@@ -300,8 +315,13 @@ public class IssueReturnController {
 
     private void resetIssueUI() {
         disableIssueControls();
-        issueLabel1.setText("");
-        issueLabel2.setText("");
+        titleLabel.setText("");
+        authorLabel.setText("");
+        availableLabel.setText("");
+        priceLabel.setText("");
+        issue_userIdLabel.setText("");
+        userNameLabel.setText("");
+        issue_returnDateLabel.setText("");
     }
 
     private void disableReturnControls() {
@@ -310,7 +330,12 @@ public class IssueReturnController {
 
     private void resetReturnUI() {
         disableReturnControls();
-        returnLabel1.setText("");
-        returnLabel2.setText("");
+        copyIDLabel.setText("");
+        isbnLabel.setText("");
+        return_userIdLabel.setText("");
+        issueDateLabel.setText("");
+        return_returnDateLabel.setText("");
+        statusLabel.setText("");
+        overdueStatusLabel.setText("");
     }
 }
