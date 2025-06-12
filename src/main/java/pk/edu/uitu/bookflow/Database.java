@@ -5,11 +5,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Database {
-    private static final String URL = "jdbc:mysql://localhost:3306/bookflow";
-    private static final String USER = "#####";
-    private static final String PASSWORD = "#####";
+    private static final String url = "jdbc:sqlite:bookflow.db";
 
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(URL, USER, PASSWORD);
+        return DriverManager.getConnection(url);
     }
 }

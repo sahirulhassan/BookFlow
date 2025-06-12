@@ -1,7 +1,6 @@
 module pk.edu.uitu.bookflow {
     requires javafx.controls;
     requires javafx.fxml;
-    requires mysql.connector.j;
     requires java.sql;
     requires java.desktop;
 
