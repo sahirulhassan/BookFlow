@@ -94,7 +94,7 @@ public class RegistrationController {
 
         // Show the scene
         Stage stage = (Stage) regButton.getScene().getWindow();
-        stage.setScene(new Scene(root, 720, 480));
+        stage.setScene(new Scene(root));
         stage.setTitle("Login");
         stage.show();
     }

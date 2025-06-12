@@ -9,16 +9,16 @@ public class LoanedBook {
     private final IntegerProperty userID;
     private final StringProperty isbn;
     private final StringProperty status;
-    private final ObjectProperty<LocalDate> issueDate;
-    private final ObjectProperty<LocalDate> returnDate;
+    private final StringProperty issueDate;
+    private final StringProperty returnDate;
 
-    public LoanedBook(int id, int userID, String isbn, String status, LocalDate issueDate, LocalDate returnDate) {
+    public LoanedBook(int id, int userID, String isbn, String status, String issueDate, String returnDate) {
         this.id = new SimpleIntegerProperty(id);
         this.userID = new SimpleIntegerProperty(userID);
         this.isbn = new SimpleStringProperty(isbn);
         this.status = new SimpleStringProperty(status);
-        this.issueDate = new SimpleObjectProperty<>(issueDate);
-        this.returnDate = new SimpleObjectProperty<>(returnDate);
+        this.issueDate = new SimpleStringProperty(issueDate);
+        this.returnDate = new SimpleStringProperty(returnDate);
     }
 
     public int getId() {
@@ -53,19 +53,19 @@ public class LoanedBook {
         return status;
     }
 
-    public LocalDate getIssueDate() {
+    public String getIssueDate() {
         return issueDate.get();
     }
 
-    public ObjectProperty<LocalDate> issueDateProperty() {
+    public StringProperty issueDateProperty() {
         return issueDate;
     }
 
-    public LocalDate getReturnDate() {
+    public String getReturnDate() {
         return returnDate.get();
     }
 
-    public ObjectProperty<LocalDate> returnDateProperty() {
+    public StringProperty returnDateProperty() {
         return returnDate;
     }
 }

@@ -28,8 +28,8 @@ public class LoanedBooksController {
     @FXML private TableColumn<LoanedBook, Number> userIDColumn;
     @FXML private TableColumn<LoanedBook, String> isbnColumn;
     @FXML private TableColumn<LoanedBook, String> statusColumn;
-    @FXML private TableColumn<LoanedBook, LocalDate> issueDateColumn;
-    @FXML private TableColumn<LoanedBook, LocalDate> returnDateColumn;
+    @FXML private TableColumn<LoanedBook, String> issueDateColumn;
+    @FXML private TableColumn<LoanedBook, String> returnDateColumn;
 
     @FXML private ChoiceBox<String> searchChoiceBox;
     @FXML private TextField searchField;
@@ -79,8 +79,8 @@ public class LoanedBooksController {
                         rs.getInt("user_ID"),
                         rs.getString("isbn"),
                         rs.getString("status"),
-                        rs.getDate("issue_Date").toLocalDate(),
-                        rs.getDate("return_Date").toLocalDate()
+                        rs.getString("issue_Date"),
+                        rs.getString("return_Date")
                 ));
             }
 
@@ -117,8 +117,8 @@ public class LoanedBooksController {
             case "ID" -> book -> String.valueOf(book.getId()).contains(lowerText);
             case "User ID" -> book -> String.valueOf(book.getUserID()).contains(lowerText);
             case "ISBN" -> book -> book.getIsbn().toLowerCase().contains(lowerText);
-            case "Issue Date" -> book -> book.getIssueDate().toString().contains(lowerText);
-            case "Return Date" -> book -> book.getReturnDate().toString().contains(lowerText);
+            case "Issue Date" -> book -> book.getIssueDate().contains(lowerText);
+            case "Return Date" -> book -> book.getReturnDate().contains(lowerText);
             case "Status" -> book -> book.getStatus().toLowerCase().contains(lowerText);
             default -> book -> true;
         };

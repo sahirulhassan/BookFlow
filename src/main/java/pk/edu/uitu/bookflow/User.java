@@ -2,23 +2,21 @@ package pk.edu.uitu.bookflow;
 
 import javafx.beans.property.*;
 
-import java.time.LocalDate;
-
 public class User {
     private final IntegerProperty id;
     private final StringProperty name;
     private final StringProperty email;
     private final StringProperty password;
     private final StringProperty role;
-    private final ObjectProperty<LocalDate> joined;
+    private final StringProperty joined;
 
-    public User(int id, String name, String email, String password, String role, LocalDate joined) {
+    public User(int id, String name, String email, String password, String role, String joined) {
         this.id = new SimpleIntegerProperty(id);
         this.name = new SimpleStringProperty(name);
         this.email = new SimpleStringProperty(email);
         this.password = new SimpleStringProperty(password);
         this.role = new SimpleStringProperty(role);
-        this.joined = new SimpleObjectProperty<>(joined);
+        this.joined = new SimpleStringProperty(joined);
     }
 
     public int getId() {
@@ -81,15 +79,15 @@ public class User {
         return role;
     }
 
-    public LocalDate getJoined() {
+    public String getJoined() {
         return joined.get();
     }
 
-    public void setJoined(LocalDate joined) {
+    public void setJoined(String joined) {
         this.joined.set(joined);
     }
 
-    public ObjectProperty<LocalDate> joinedProperty() {
+    public  StringProperty joinedProperty() {
         return joined;
     }
 }

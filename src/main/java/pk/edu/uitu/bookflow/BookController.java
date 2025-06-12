@@ -96,10 +96,13 @@ public class BookController {
             addBook(isbn, title, author, genre, available, price);
         }
     }
-
+    //try catch with resources
     private void addBook(String isbn, String title, String author, String genre, int available, double price) {
         String query = "INSERT INTO books (ISBN, title, author, genre, available, price) VALUES (?, ?, ?, ?, ?, ?)";
-        try (Connection connection = Database.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try (
+            Connection connection = Database.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)
+        ) {
             preparedStatement.setString(1, isbn);
             preparedStatement.setString(2, title);
             preparedStatement.setString(3, author);
@@ -158,7 +161,10 @@ public class BookController {
         }
 
         String query = "DELETE FROM books WHERE ISBN = ?";
-        try (Connection connection = Database.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try (
+                Connection connection = Database.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(query)
+        ) {
             preparedStatement.setString(1, isbn);
             int rowsAffected = preparedStatement.executeUpdate();
             if (rowsAffected > 0) {
@@ -175,7 +181,11 @@ public class BookController {
     }
 
     private boolean bookExists(String isbn) {
-        try (Connection connection = Database.getConnection(); Statement statement = connection.createStatement(); ResultSet resultSet = statement.executeQuery("SELECT COUNT(*) FROM books WHERE ISBN = '" + isbn + "'")) {
+        try (
+                Connection connection = Database.getConnection();
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery("SELECT COUNT(*) FROM books WHERE ISBN = '" + isbn + "'")
+        ) {
             if (resultSet.next()) {
                 return resultSet.getInt(1) > 0; // If count is greater than 0, book exists
             }

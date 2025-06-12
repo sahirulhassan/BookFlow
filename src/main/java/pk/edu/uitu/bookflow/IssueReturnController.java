@@ -137,6 +137,8 @@ public class IssueReturnController {
         // Issue book: insert into loaned_books and decrement availability
         LocalDate today = LocalDate.now();
         LocalDate returnDate = today.plusDays(7);
+        String today_inText = today.toString();
+        String returnDate_inText = returnDate.toString();
 
         try (Connection conn = Database.getConnection()) {
             conn.setAutoCommit(false);
@@ -144,8 +146,8 @@ public class IssueReturnController {
             try (PreparedStatement insertStmt = conn.prepareStatement(INSERT_ISSUED_BOOK)) {
                 insertStmt.setString(1, userId);
                 insertStmt.setString(2, isbn);
-                insertStmt.setDate(3, Date.valueOf(today));
-                insertStmt.setDate(4, Date.valueOf(returnDate));
+                insertStmt.setString(3, today_inText);
+                insertStmt.setString(4, returnDate_inText);
                 int inserted = insertStmt.executeUpdate();
                 if (inserted <= 0) {
                     conn.rollback();
@@ -189,8 +191,8 @@ public class IssueReturnController {
                     showAlert(Alert.AlertType.ERROR, "No issued book found with this Copy ID.");
                     return;
                 }
-                LocalDate issueDate = rs.getDate("issue_date").toLocalDate();
-                LocalDate returnDate = rs.getDate("return_date").toLocalDate();
+                LocalDate issueDate = LocalDate.parse(rs.getString("issue_date"));
+                LocalDate returnDate = LocalDate.parse(rs.getString("return_date"));
                 String isbn = rs.getString("isbn");
                 String userId = rs.getString("user_id");
                 String status = rs.getString("status");

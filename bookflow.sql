@@ -4,8 +4,8 @@ CREATE TABLE users (
     name       TEXT NOT NULL,
     email      TEXT NOT NULL UNIQUE,
     password   TEXT NOT NULL,
-    role       TEXT DEFAULT 'USER', -- ENUM not supported in SQLite
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    role       TEXT DEFAULT 'USER',
+    created_at TEXT DEFAULT (date('now'))
 );
 
 -- Insert an admin user
@@ -35,9 +35,9 @@ CREATE TABLE loaned_books (
     id          INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id     INTEGER NOT NULL,
     isbn        TEXT NOT NULL,
-    issue_date  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    return_date DATE,
-    status      TEXT DEFAULT 'ISSUED', -- ENUM not supported in SQLite
+    issue_date  TEXT DEFAULT (date('now')),
+    return_date TEXT,
+    status      TEXT DEFAULT 'ISSUED',
 
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (isbn) REFERENCES books(isbn) ON DELETE CASCADE

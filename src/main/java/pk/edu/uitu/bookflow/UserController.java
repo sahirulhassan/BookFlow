@@ -10,6 +10,7 @@ import javafx.scene.control.*;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.function.Predicate;
 
 import static javafx.collections.FXCollections.observableArrayList;
@@ -29,7 +30,7 @@ public class UserController {
     @FXML
     private TableColumn<User, String> emailColumn;
     @FXML
-    private TableColumn<User, LocalDate> joinedColumn;
+    private TableColumn<User, String> joinedColumn;
     @FXML
     private TableColumn<User, String> nameColumn;
     @FXML
@@ -60,10 +61,10 @@ public class UserController {
         String name = nameField.getText().trim();
         String email = emailField.getText().trim().toLowerCase();
         String password = pwField.getText().trim();
-        LocalDate joined = joinedDatePicker.getValue();
+        String joined = joinedDatePicker.getValue().toString();
         String role = ((RadioButton) roleToggleGroup.getSelectedToggle()).getText();
 
-        if (name.isEmpty() || email.isEmpty() || password.isEmpty() || joined == null) {
+        if (name.isEmpty() || email.isEmpty() || password.isEmpty() || joined.isEmpty() || role.isEmpty()) {
             // Show error message
             Alert alert = new Alert(Alert.AlertType.ERROR, "Please fill all fields.");
             alert.showAndWait();
@@ -84,9 +85,12 @@ public class UserController {
         }
     }
 
-    private void addUser(int id, String name, String email, String password, String role, LocalDate joined) {
+    private void addUser(int id, String name, String email, String password, String role, String joined) {
         String query = "INSERT INTO users (ID, Name, Email, Password, Role, Created_At) VALUES (?, ?, ?, ?, ?, ?)";
-        try (Connection connection = Database.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try (
+            Connection connection = Database.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)
+        ) {
             preparedStatement.setInt(1, id);
             preparedStatement.setString(2, name);
             preparedStatement.setString(3, email);
@@ -107,8 +111,8 @@ public class UserController {
         }
     }
 
-    private void updateUser(int id, String name, String email, String password, String role, LocalDate joined) {
-        String query = "UPDATE users SET Name = ?, Email = ?, Password = ?, Role = ?, Joined = ? WHERE ID = ?";
+    private void updateUser(int id, String name, String email, String password, String role, String joined) {
+        String query = "UPDATE users SET Name = ?, Email = ?, Password = ?, Role = ?, Created_At = ? WHERE ID = ?";
         try (Connection connection = Database.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, email);
@@ -148,7 +152,10 @@ public class UserController {
         }
 
         String query = "DELETE FROM users WHERE ID = ?";
-        try (Connection connection = Database.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try (
+            Connection connection = Database.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)
+        ) {
 
             preparedStatement.setInt(1, id);
             int rowsAffected = preparedStatement.executeUpdate();
@@ -197,9 +204,13 @@ public class UserController {
         try (Connection connection = Database.getConnection(); Statement statement = connection.createStatement(); ResultSet resultSet = statement.executeQuery(query)) {
 
             while (resultSet.next()) {
-                users.add(new User(resultSet.getInt("ID"), resultSet.getString("Name"), resultSet.getString("Email"),
-                        resultSet.getString("Password"), resultSet.getString("Role"),
-                        resultSet.getDate("Created_At").toLocalDate()));
+                users.add(
+                        new User(resultSet.getInt("ID"),
+                        resultSet.getString("Name"),
+                        resultSet.getString("Email"),
+                        resultSet.getString("Password"),
+                        resultSet.getString("Role"),
+                        resultSet.getString("Created_At")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -238,10 +249,9 @@ public class UserController {
                 emailField.setText(newValue.getEmail());
                 nameField.setText(newValue.getName());
                 pwField.setText(newValue.getPassword());
-                joinedDatePicker.setValue(newValue.getJoined());
+                joinedDatePicker.setValue(LocalDate.parse(newValue.getJoined()));
             }
         });
-
     }
 
     private Predicate<User> createPredicate() {
