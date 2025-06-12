@@ -65,8 +65,8 @@ public class HomeController implements Initializable {
     }
 
     @FXML
-    private void handleAnalyticsTab() {
-        switchViews("analytics.fxml");
+    private void handleLoanedBooksTab() {
+        switchViews("loaned_books.fxml");
     }
 
     @FXML

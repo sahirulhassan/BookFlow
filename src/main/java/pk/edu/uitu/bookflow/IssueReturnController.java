@@ -48,10 +48,14 @@ public class IssueReturnController {
     // SQL queries as constants
     private static final String SELECT_BOOK_BY_ISBN = "SELECT title, author, available, price FROM books WHERE isbn = ?";
     private static final String SELECT_USER_BY_ID = "SELECT name FROM users WHERE id = ?";
-    private static final String INSERT_ISSUED_BOOK = "INSERT INTO issued_books (user_id, isbn, issue_date, return_date, status) VALUES (?, ?, ?, ?, 'ISSUED')";
+    private static final String INSERT_ISSUED_BOOK = "INSERT INTO loaned_books (user_id, isbn, issue_date, " +
+            "return_date, " +
+            "status) VALUES (?, ?, ?, ?, 'ISSUED')";
     private static final String UPDATE_BOOK_AVAILABILITY_DECREMENT = "UPDATE books SET available = available - 1 WHERE isbn = ?";
-    private static final String SELECT_ISSUED_BY_ID = "SELECT issue_date, return_date, isbn, user_id, status FROM issued_books WHERE id = ?";
-    private static final String UPDATE_ISSUED_STATUS_RETURNED = "UPDATE issued_books SET status = 'RETURNED' WHERE id = ?";
+    private static final String SELECT_ISSUED_BY_ID = "SELECT issue_date, return_date, isbn, user_id, status FROM " +
+            "loaned_books WHERE id = ?";
+    private static final String UPDATE_ISSUED_STATUS_RETURNED = "UPDATE loaned_books SET status = 'RETURNED' WHERE id" +
+            " = ?";
     private static final String UPDATE_BOOK_AVAILABILITY_INCREMENT = "UPDATE books SET available = available + 1 WHERE isbn = ?";
 
     @FXML
@@ -130,13 +134,13 @@ public class IssueReturnController {
             return;
         }
 
-        // Issue book: insert into issued_books and decrement availability
+        // Issue book: insert into loaned_books and decrement availability
         LocalDate today = LocalDate.now();
         LocalDate returnDate = today.plusDays(7);
 
         try (Connection conn = Database.getConnection()) {
             conn.setAutoCommit(false);
-            // Insert issued_books
+            // Insert loaned_books
             try (PreparedStatement insertStmt = conn.prepareStatement(INSERT_ISSUED_BOOK)) {
                 insertStmt.setString(1, userId);
                 insertStmt.setString(2, isbn);
@@ -215,7 +219,7 @@ public class IssueReturnController {
             return;
         }
 
-        // First update issued_books.status
+        // First update loaned_books.status
         try (Connection conn = Database.getConnection()) {
             conn.setAutoCommit(false);
             // Update status
@@ -268,9 +272,9 @@ public class IssueReturnController {
         return null;
     }
 
-    // Helper: fetch ISBN from issued_books given copyID, using existing connection
+    // Helper: fetch ISBN from loaned_books given copyID, using existing connection
     private String fetchIssuedIsbn(Connection conn, String copyID) throws SQLException {
-        try (PreparedStatement stmt = conn.prepareStatement("SELECT isbn FROM issued_books WHERE id = ?")) {
+        try (PreparedStatement stmt = conn.prepareStatement("SELECT isbn FROM loaned_books WHERE id = ?")) {
             stmt.setString(1, copyID);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
