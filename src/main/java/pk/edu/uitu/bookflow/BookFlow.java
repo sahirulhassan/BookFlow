@@ -15,7 +15,7 @@ public class BookFlow extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("pages/login.fxml"));
-        Scene scene = new Scene(loader.load(), 720, 480);
+        Scene scene = new Scene(loader.load());
         stage.setTitle("Login - BookFlow");
         stage.setScene(scene);
         stage.show();

@@ -12,8 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pk.edu.uitu.bookflow.IssueReturnController">
+<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="630.0" prefWidth="950.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pk.edu.uitu.bookflow.IssueReturnController">
    <center>
       <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
@@ -31,7 +30,7 @@
                            <children>
                               <Label fx:id="issueLabel1" alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" wrapText="true" VBox.vgrow="ALWAYS">
                                  <font>
-                                    <Font name="Calibri Light" size="12.0" />
+                                    <Font name="Calibri" size="14.0" />
                                  </font>
                               </Label>
                            </children>
@@ -53,7 +52,7 @@
                            <children>
                               <Label fx:id="issueLabel2" alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" wrapText="true" VBox.vgrow="ALWAYS">
                                  <font>
-                                    <Font name="Calibri Light" size="12.0" />
+                                    <Font name="Calibri" size="14.0" />
                                  </font>
                               </Label>
                            </children>
@@ -90,6 +89,9 @@
                                  <VBox.margin>
                                     <Insets />
                                  </VBox.margin>
+                                 <font>
+                                    <Font name="Calibri" size="14.0" />
+                                 </font>
                               </Label>
                            </children>
                            <VBox.margin>
@@ -113,6 +115,9 @@
                                  <padding>
                                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                  </padding>
+                                 <font>
+                                    <Font name="Calibri" size="14.0" />
+                                 </font>
                               </Label>
                            </children>
                         </VBox>

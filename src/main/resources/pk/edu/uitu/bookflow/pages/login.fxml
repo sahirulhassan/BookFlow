@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pk.edu.uitu.bookflow.LoginController">
+<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="630.0" prefWidth="1050.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pk.edu.uitu.bookflow.LoginController">
    <center>
       <VBox alignment="CENTER" fillWidth="false" spacing="5.0" BorderPane.alignment="CENTER">
          <children>
@@ -63,7 +63,7 @@
             </HBox>
          </children>
          <BorderPane.margin>
-            <Insets bottom="75.0" left="150.0" right="150.0" top="60.0" />
+            <Insets bottom="75.0" left="100.0" right="100.0" top="60.0" />
          </BorderPane.margin>
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

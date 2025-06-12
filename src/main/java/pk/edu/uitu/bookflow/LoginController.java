@@ -45,7 +45,7 @@ public class LoginController {
         boolean success = authenticate(email, password);
         if (success) {
             statusLabel.setText("Login successful!");
-            PauseTransition pause = new PauseTransition(seconds(1.5));
+            PauseTransition pause = new PauseTransition(seconds(1));
             pause.setOnFinished(event -> toHomePage());
             pause.play();
         } else {
@@ -61,7 +61,7 @@ public class LoginController {
 
             // Get current stage and set new scene
             Stage stage = (Stage) loginBtn.getScene().getWindow();
-            stage.setScene(new Scene(root, 720, 480));
+            stage.setScene(new Scene(root));
             stage.setTitle("Home");
             stage.show();
         } catch (Exception e) {
@@ -93,7 +93,7 @@ public class LoginController {
 
             // Get current stage and set new scene
             Stage stage = (Stage) registerLink.getScene().getWindow();
-            stage.setScene(new Scene(root, 720, 480));
+            stage.setScene(new Scene(root));
             stage.setTitle("Register");
             stage.show();
         } catch (Exception e) {

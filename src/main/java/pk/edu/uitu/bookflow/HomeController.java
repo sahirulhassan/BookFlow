@@ -83,7 +83,7 @@ public class HomeController implements Initializable {
 
             // Get current stage and set new scene
             Stage stage = (Stage) logoutBtn.getScene().getWindow();
-            stage.setScene(new Scene(root, 720, 480));
+            stage.setScene(new Scene(root));
             stage.setTitle("Login - BookFlow");
             stage.show();
         } catch (IOException e) {
