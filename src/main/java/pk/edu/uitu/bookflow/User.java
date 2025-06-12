@@ -47,20 +47,12 @@ public class User {
         return email.get();
     }
 
-    public void setEmail(String email) {
-        this.email.set(email);
-    }
-
     public StringProperty emailProperty() {
         return email;
     }
 
     public String getPassword() {
         return password.get();
-    }
-
-    public void setPassword(String password) {
-        this.password.set(password);
     }
 
     public StringProperty passwordProperty() {
@@ -71,20 +63,12 @@ public class User {
         return role.get();
     }
 
-    public void setRole(String role) {
-        this.role.set(role);
-    }
-
     public StringProperty roleProperty() {
         return role;
     }
 
     public String getJoined() {
         return joined.get();
-    }
-
-    public void setJoined(String joined) {
-        this.joined.set(joined);
     }
 
     public  StringProperty joinedProperty() {

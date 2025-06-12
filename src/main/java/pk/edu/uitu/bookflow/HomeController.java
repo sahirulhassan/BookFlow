@@ -16,28 +16,10 @@ import java.util.ResourceBundle;
 public class HomeController implements Initializable {
 
     @FXML
-    private Button IssueReturnBtn;
-
-    @FXML
-    private Button analyticsBtn;
-
-    @FXML
-    private Button booksBtn;
-
-    @FXML
-    private Button dashBtn;
-
-    @FXML
     private Button logoutBtn;
 
     @FXML
     private StackPane mainContentPane;
-
-    @FXML
-    private Button membersBtn;
-
-    @FXML
-    private Button settingsButton;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

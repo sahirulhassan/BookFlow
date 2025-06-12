@@ -23,20 +23,12 @@ public class Book {
         return title.get();
     }
 
-    public void setTitle(String title) {
-        this.title.set(title);
-    }
-
     public StringProperty titleProperty() {
         return title;
     }
 
     public String getISBN() {
         return ISBN.get();
-    }
-
-    public void setISBN(String ISBN) {
-        this.ISBN.set(ISBN);
     }
 
     public StringProperty ISBNProperty() {
@@ -47,20 +39,12 @@ public class Book {
         return author.get();
     }
 
-    public void setAuthor(String author) {
-        this.author.set(author);
-    }
-
     public StringProperty authorProperty() {
         return author;
     }
 
     public String getGenre() {
         return genre.get();
-    }
-
-    public void setGenre(String genre) {
-        this.genre.set(genre);
     }
 
     public StringProperty genreProperty() {
@@ -71,20 +55,12 @@ public class Book {
         return available.get();
     }
 
-    public void setAvailable(int available) {
-        this.available.set(available);
-    }
-
     public IntegerProperty availableProperty() {
         return available;
     }
 
     public Double getPrice() {
         return price.get();
-    }
-
-    public void setPrice(int price) {
-        this.price.set(price);
     }
 
     public DoubleProperty priceProperty() {

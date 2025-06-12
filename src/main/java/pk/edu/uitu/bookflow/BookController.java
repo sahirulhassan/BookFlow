@@ -51,11 +51,6 @@ public class BookController {
     private Spinner<Double> priceSpinner;
 
     @FXML
-    private Button addUpdateBtn;
-    @FXML
-    private Button deleteBtn;
-
-    @FXML
     void handleRefresh() {
         ObservableList<Book> books = getBooks(); // All books
         FilteredList<Book> filteredBooks = getFilteredBooks(books); // Filtered books

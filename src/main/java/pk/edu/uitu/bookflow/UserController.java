@@ -20,8 +20,6 @@ public class UserController {
     private ChoiceBox<String> searchChoiceBox;
     @FXML
     private TextField searchField;
-    @FXML
-    private Button refreshBtn;
 
     @FXML
     private TableView<User> userTable;
@@ -50,11 +48,6 @@ public class UserController {
     private TextField pwField;
     @FXML
     private ToggleGroup roleToggleGroup;
-
-    @FXML
-    private Button addUpdateBtn;
-    @FXML
-    private Button deleteBtn;
 
     @FXML
     void handleAddUpdate() {
