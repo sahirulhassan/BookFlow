@@ -45,40 +45,65 @@ public class IssueReturnController {
     @FXML
     private TextField userIDField;
 
+    // SQL queries as constants
+    private static final String SELECT_BOOK_BY_ISBN = "SELECT title, author, available, price FROM books WHERE isbn = ?";
+    private static final String SELECT_USER_BY_ID = "SELECT name FROM users WHERE id = ?";
+    private static final String INSERT_ISSUED_BOOK = "INSERT INTO issued_books (user_id, isbn, issue_date, return_date, status) VALUES (?, ?, ?, ?, 'ISSUED')";
+    private static final String UPDATE_BOOK_AVAILABILITY_DECREMENT = "UPDATE books SET available = available - 1 WHERE isbn = ?";
+    private static final String SELECT_ISSUED_BY_ID = "SELECT issue_date, return_date, isbn, user_id, status FROM issued_books WHERE id = ?";
+    private static final String UPDATE_ISSUED_STATUS_RETURNED = "UPDATE issued_books SET status = 'RETURNED' WHERE id = ?";
+    private static final String UPDATE_BOOK_AVAILABILITY_INCREMENT = "UPDATE books SET available = available + 1 WHERE isbn = ?";
+
+    @FXML
+    public void initialize() {
+        // Default states: disable issue/return buttons and related fields
+        disableIssueControls();
+        disableReturnControls();
+
+        // Listeners to reset UI when fields change
+        isbnField.textProperty().addListener((obs, oldText, newText) -> resetIssueUI());
+        userIDField.textProperty().addListener((obs, oldText, newText) -> issueBtn.setDisable(newText.trim().isEmpty()));
+        CopyIDField.textProperty().addListener((obs, oldText, newText) -> resetReturnUI());
+
+        // Optionally, disable copyIdSearchBtn / isbnSearchBtn when their fields are empty
+        isbnField.textProperty().addListener((obs, oldText, newText) -> isbnSearchBtn.setDisable(newText.trim().isEmpty()));
+        CopyIDField.textProperty().addListener((obs, oldText, newText) -> copyIdSearchBtn.setDisable(newText.trim().isEmpty()));
+    }
+
     @FXML
     void handleIsbnSearch() {
         String isbn = isbnField.getText().trim().toLowerCase();
         if (isbn.isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Please enter an ISBN to search.");
-            alert.showAndWait();
+            showAlert(Alert.AlertType.ERROR, "Please enter an ISBN to search.");
+            return;
         }
-        String query = "SELECT * FROM books WHERE isbn = ?";
-        try (
-                Connection connection = Database.getConnection();
-                PreparedStatement statement = connection.prepareStatement(query)
-        ) {
-            statement.setString(1, isbn);
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                String title = resultSet.getString("title");
-                String author = resultSet.getString("author");
-                int availableCopies = resultSet.getInt("available");
-                int price = resultSet.getInt("price");
-                String issuelabel1Text =
-                        "Title: " + title + "\nAuthor: " + author + "\nAvailable Copies: " + availableCopies + "\nPrice: " + price + " PKR";
-                issueLabel1.setText(issuelabel1Text);
+
+        // Query book
+        try (Connection conn = Database.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(SELECT_BOOK_BY_ISBN)) {
+
+            stmt.setString(1, isbn);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (!rs.next()) {
+                    showAlert(Alert.AlertType.ERROR, "No book found with the provided ISBN.");
+                    return;
+                }
+                String title = rs.getString("title");
+                String author = rs.getString("author");
+                int availableCopies = rs.getInt("available");
+                int price = rs.getInt("price");
+
+                issueLabel1.setText(String.format(
+                        "Title: %s%nAuthor: %s%nAvailable Copies: %d%nPrice: %d PKR",
+                        title, author, availableCopies, price));
+
                 if (availableCopies > 0) {
                     userIDField.setDisable(false);
-                    issueBtn.setDisable(false);
-                    isbnField.textProperty().addListener((obs, oldText, newText) -> {
-                        issueBtn.setDisable(true); // locks the button when user edits the field
-                        userIDField.setDisable(true); // enables the userID field
-                        issueLabel1.setText(""); // clears the issue label
-                    });
+                    // issueBtn remains disabled until userIDField non-empty (listener handles that)
+                } else {
+                    showAlert(Alert.AlertType.INFORMATION, "No copies currently available to issue.");
+                    disableIssueControls();
                 }
-            } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR, "No book found with the provided ISBN.");
-                alert.showAndWait();
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -89,65 +114,55 @@ public class IssueReturnController {
     void handleIssueBtn() {
         String userId = userIDField.getText().trim();
         if (userId.isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Please enter a User ID to issue the book.");
-            alert.showAndWait();
+            showAlert(Alert.AlertType.ERROR, "Please enter a User ID to issue the book.");
             return;
-        }
-        String query = "SELECT * FROM users WHERE id = ?";
-        String username = "";
-        try (
-                Connection connection = Database.getConnection();
-                PreparedStatement statement = connection.prepareStatement(query)
-        ) {
-            statement.setString(1, userId);
-            ResultSet resultSet = statement.executeQuery();
-            if (!resultSet.next()) {
-                Alert alert = new Alert(Alert.AlertType.ERROR, "No user found with the provided User ID.");
-                alert.showAndWait();
-                return;
-            }
-            username = resultSet.getString("name");
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
         String isbn = isbnField.getText().trim().toLowerCase();
         if (isbn.isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Please enter an ISBN to issue the book.");
-            alert.showAndWait();
+            showAlert(Alert.AlertType.ERROR, "Please enter an ISBN to issue the book.");
             return;
         }
 
-        LocalDate today = LocalDate.now();
-        LocalDate nextWeek = today.plusDays(7);
-        Date sqlDate = Date.valueOf(nextWeek); // return date
+        // Verify user exists
+        String username = fetchUserName(userId);
+        if (username == null) {
+            showAlert(Alert.AlertType.ERROR, "No user found with the provided User ID.");
+            return;
+        }
 
-        query = "INSERT INTO issued_books (user_id, isbn, issue_date, return_date) VALUES (?, ?, ?, ?)";
-        try (
-                Connection connection = Database.getConnection();
-                PreparedStatement statement = connection.prepareStatement(query)
-        ) {
-            statement.setString(1, userId);
-            statement.setString(2, isbn);
-            statement.setDate(3, Date.valueOf(today));
-            statement.setDate(4, sqlDate);
-            int rowsAffected = statement.executeUpdate();
-            if (rowsAffected > 0) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Book issued successfully!");
-                alert.showAndWait();
-                String issueLabel2Text =
-                        "Book issued to User ID: " + userId + "\nUser Name: " + username + "\nReturn Date: " + nextWeek;
-                issueLabel2.setText(issueLabel2Text);
-                issueBtn.setDisable(true);
-                userIDField.setDisable(true);
-                query = "UPDATE books SET available = available - 1 WHERE isbn = ?";
-                try (PreparedStatement updateStatement = connection.prepareStatement(query)) {
-                    updateStatement.setString(1, isbn);
-                    updateStatement.executeUpdate();
+        // Issue book: insert into issued_books and decrement availability
+        LocalDate today = LocalDate.now();
+        LocalDate returnDate = today.plusDays(7);
+
+        try (Connection conn = Database.getConnection()) {
+            conn.setAutoCommit(false);
+            // Insert issued_books
+            try (PreparedStatement insertStmt = conn.prepareStatement(INSERT_ISSUED_BOOK)) {
+                insertStmt.setString(1, userId);
+                insertStmt.setString(2, isbn);
+                insertStmt.setDate(3, Date.valueOf(today));
+                insertStmt.setDate(4, Date.valueOf(returnDate));
+                int inserted = insertStmt.executeUpdate();
+                if (inserted <= 0) {
+                    conn.rollback();
+                    showAlert(Alert.AlertType.ERROR, "Failed to issue the book. Please try again.");
+                    return;
                 }
-            } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to issue the book. Please try again.");
-                alert.showAndWait();
             }
+
+            // Update books.available
+            try (PreparedStatement updateStmt = conn.prepareStatement(UPDATE_BOOK_AVAILABILITY_DECREMENT)) {
+                updateStmt.setString(1, isbn);
+                updateStmt.executeUpdate();
+            }
+            conn.commit();
+
+            showAlert(Alert.AlertType.INFORMATION, "Book issued successfully!");
+            issueLabel2.setText(String.format(
+                    "Book issued to User ID: %s%nUser Name: %s%nReturn Date: %s",
+                    userId, username, returnDate));
+            disableIssueControls();
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -157,40 +172,36 @@ public class IssueReturnController {
     void handleCopyIdSearch(ActionEvent event) {
         String copyID = CopyIDField.getText().trim().toLowerCase();
         if (copyID.isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Please enter an Copy or Receipt ID to search.");
-            alert.showAndWait();
+            showAlert(Alert.AlertType.ERROR, "Please enter a Copy or Receipt ID to search.");
             return;
         }
-        String query = "SELECT * FROM issued_books WHERE id = ?";
-        try (
-                Connection connection = Database.getConnection();
-                PreparedStatement statement = connection.prepareStatement(query)
-        ) {
-            statement.setString(1, copyID);
-            ResultSet resultSet = statement.executeQuery();
-            if (!resultSet.next()) {
-                Alert alert = new Alert(Alert.AlertType.ERROR, "No issued book found with this Copy ID.");
-                alert.showAndWait();
-                return;
+
+        try (Connection conn = Database.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(SELECT_ISSUED_BY_ID)) {
+
+            stmt.setString(1, copyID);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (!rs.next()) {
+                    showAlert(Alert.AlertType.ERROR, "No issued book found with this Copy ID.");
+                    return;
+                }
+                LocalDate issueDate = rs.getDate("issue_date").toLocalDate();
+                LocalDate returnDate = rs.getDate("return_date").toLocalDate();
+                String isbn = rs.getString("isbn");
+                String userId = rs.getString("user_id");
+                String status = rs.getString("status");
+                if (!"ISSUED".equalsIgnoreCase(status)) {
+                    showAlert(Alert.AlertType.ERROR, "This copy has already been returned.");
+                    return;
+                }
+                boolean isOverdue = LocalDate.now().isAfter(returnDate);
+                String overdueNote = isOverdue ? "This book is OVERDUE!" : "";
+
+                returnLabel1.setText(String.format(
+                        "Copy ID: %s%nISBN: %s%nUser ID: %s%nIssue Date: %s%nReturn Date: %s%nStatus: %s%n%s",
+                        copyID, isbn, userId, issueDate, returnDate, status, overdueNote));
+                returnBtn.setDisable(false);
             }
-            LocalDate issue_date = resultSet.getDate("issue_date").toLocalDate();
-            LocalDate returnDate = resultSet.getDate("return_date").toLocalDate();
-            String isbn = resultSet.getString("isbn");
-            String userId = resultSet.getString("user_id");
-            String status = resultSet.getString("status").toLowerCase();
-            if (!status.equals("issued")) {
-                Alert alert = new Alert(Alert.AlertType.ERROR, "This book is not currently issued.");
-                alert.showAndWait();
-                return;
-            }
-            String returnLabel1Text =
-                    "Copy ID: " + copyID + "\nISBN: " + isbn + "\nUser ID: " + userId + "\nIssue Date: " + issue_date + "\nReturn Date: " + returnDate + "\nStatus: " + status;
-            returnLabel1.setText(returnLabel1Text);
-            returnBtn.setDisable(false);
-            CopyIDField.textProperty().addListener((obs, oldText, newText) -> {
-                returnBtn.setDisable(true); // locks the button when user edits the field
-                returnLabel1.setText(""); // clears the return label
-            });
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -200,58 +211,100 @@ public class IssueReturnController {
     void handleReturnBtn() {
         String copyID = CopyIDField.getText().trim().toLowerCase();
         if (copyID.isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Please enter a Copy ID to return the book.");
-            alert.showAndWait();
+            showAlert(Alert.AlertType.ERROR, "Please enter a Copy ID to return the book.");
             return;
         }
-        String query = "UPDATE issued_books SET status = 'RETURNED' WHERE id = ?";
-        try (
-                Connection connection = Database.getConnection();
-                PreparedStatement statement = connection.prepareStatement(query)
-        ) {
-            statement.setString(1, copyID);
-            int rowsAffected = statement.executeUpdate();
-            if (rowsAffected > 0) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Book returned successfully!");
-                alert.showAndWait();
-                returnLabel2.setText("Book with Copy ID: " + copyID + " has been returned successfully.");
-                returnBtn.setDisable(true);
-            } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to return the book. Please try again.");
-                alert.showAndWait();
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
 
-        query = "SELECT isbn FROM issued_books WHERE id = ?";
-        String isbn = "";
-        try (
-            Connection connection = Database.getConnection();
-            PreparedStatement statement = connection.prepareStatement(query)
-        ) {
-            statement.setString(1, copyID);
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                isbn = resultSet.getString("isbn");
-            } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR, "No issued book found with this Copy ID.");
-                alert.showAndWait();
+        // First update issued_books.status
+        try (Connection conn = Database.getConnection()) {
+            conn.setAutoCommit(false);
+            // Update status
+            try (PreparedStatement stmt = conn.prepareStatement(UPDATE_ISSUED_STATUS_RETURNED)) {
+                stmt.setString(1, copyID);
+                int updated = stmt.executeUpdate();
+                if (updated <= 0) {
+                    conn.rollback();
+                    showAlert(Alert.AlertType.ERROR, "Failed to return the book. Please try again.");
+                    return;
+                }
+            }
+            // Fetch ISBN for availability increment
+            String isbn = fetchIssuedIsbn(conn, copyID);
+            if (isbn == null) {
+                conn.rollback();
+                showAlert(Alert.AlertType.ERROR, "No issued book found with this Copy ID.");
                 return;
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+            // Update books.available
+            try (PreparedStatement updBook = conn.prepareStatement(UPDATE_BOOK_AVAILABILITY_INCREMENT)) {
+                updBook.setString(1, isbn);
+                updBook.executeUpdate();
+            }
+            conn.commit();
 
-        query = "UPDATE books SET available = available + 1 WHERE isbn = ?";
-        try (
-            Connection connection = Database.getConnection();
-            PreparedStatement updateStatement = connection.prepareStatement(query)
-        ) {
-            updateStatement.setString(1, isbn);
-            updateStatement.executeUpdate();
+            showAlert(Alert.AlertType.INFORMATION, "Book returned successfully!");
+            returnLabel2.setText("Book with Copy ID: " + copyID + " has been returned successfully.");
+            returnBtn.setDisable(true);
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    // Helper: fetch user name or return null if not found
+    private String fetchUserName(String userId) {
+        try (Connection conn = Database.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(SELECT_USER_BY_ID)) {
+
+            stmt.setString(1, userId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("name");
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
+    // Helper: fetch ISBN from issued_books given copyID, using existing connection
+    private String fetchIssuedIsbn(Connection conn, String copyID) throws SQLException {
+        try (PreparedStatement stmt = conn.prepareStatement("SELECT isbn FROM issued_books WHERE id = ?")) {
+            stmt.setString(1, copyID);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("isbn");
+                }
+            }
+        }
+        return null;
+    }
+
+    // UI helper methods
+    private void showAlert(Alert.AlertType type, String msg) {
+        Alert alert = new Alert(type, msg);
+        alert.showAndWait();
+    }
+
+    private void disableIssueControls() {
+        issueBtn.setDisable(true);
+        userIDField.setDisable(true);
+    }
+
+    private void resetIssueUI() {
+        disableIssueControls();
+        issueLabel1.setText("");
+        issueLabel2.setText("");
+    }
+
+    private void disableReturnControls() {
+        returnBtn.setDisable(true);
+    }
+
+    private void resetReturnUI() {
+        disableReturnControls();
+        returnLabel1.setText("");
+        returnLabel2.setText("");
     }
 }
