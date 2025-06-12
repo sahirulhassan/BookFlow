@@ -41,7 +41,7 @@
                         <Font name="Calibri Light" size="14.0" />
                      </font>
                   </Button>
-                  <Button fx:id="analyticsBtn" mnemonicParsing="false" onAction="#handleAnalyticsTab" prefWidth="100.0" text="Analytics">
+                  <Button fx:id="loanedBooksBtn" mnemonicParsing="false" onAction="#handleLoanedBooksTab" prefWidth="100.0" text="Loaned Books">
                      <font>
                         <Font name="Calibri Light" size="14.0" />
                      </font>
